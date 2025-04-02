@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Что выбрать: iPhone или Android?</title>
+    <!-- Добавьте Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            padding-bottom: 100px;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        #progress {
+            margin-bottom: 10px;
+        }
+        .stats {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 250px;
+        }
+        .stats div {
+            margin: 8px 0;
+            padding: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        .stats-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Что выбрать: iPhone или Android?</h1>
+    <p>Ответьте на 10 вопросов, и мы поможем вам определиться!</p>
+
+    <div id="progress">Вопрос 1 из 10</div>
+
+    <div id="question1" class="question active">
+        <p>1. Готовы ли вы потратить на смартфон более 40 тысяч рублей?</p>
+        <button onclick="answer(true, 'iphone')">Да</button>
+        <button onclick="answer(false, 'android')">Нет</button>
+    </div>
+
+    <div id="question2" class="question">
+        <p>2. Готовы ли вы покупать приложения в соответствующем онлайн-магазине?</p>
+        <button onclick="answer(true, 'iphone')">Да</button>
+        <button onclick="answer(false, 'android')">Нет</button>
+    </div>
+
+    <div id="question3" class="question">
+        <p>3. Часто ли вы персонализируете своё устройство?</p>
+        <button onclick="answer(true, 'android')">Да</button>
+        <button onclick="answer(false, 'iphone')">Нет</button>
+    </div>
+
+    <div id="question4" class="question">
+        <p>4. Хотите ли вы использовать SD-карту для расширения памяти смартфона?</p>
+        <button onclick="answer(true, 'android')">Да</button>
+        <button onclick="answer(false, 'iphone')">Нет</button>
+    </div>
+
+    <div id="question5" class="question">
+        <p>5. Планируете ли вы пользоваться одним смартфоном более 5 лет?</p>
+        <button onclick="answer(true, 'iphone')">Да</button>
+        <button onclick="answer(false, 'android')">Нет</button>
+    </div>
+
+    <div id="question6" class="question">
+        <p>6. Разбираетесь ли вы в смартфонах?</p>
+        <button onclick="answer(true, 'android')">Да</button>
+        <button onclick="answer(false, 'iphone')">Нет</button>
+    </div>
+
+    <div id="question7" class="question">
+        <p>7. Какой операционной системой вы пользовались ранее: Android или iOS?</p>
+        <button onclick="answer(true, 'iphone')">iPhone</button>
+        <button onclick="answer(true, 'android')">Android</button>
+    </div>
+
+    <div id="question8" class="question">
+        <p>8. Нужна ли вам полная комплектация при покупке смартфона (Зарядка, провод для зарядки, скрепка для СИМ-карт, чехол, защитное стекло)?</p>
+        <button onclick="answer(true, 'android')">Да</button>
+        <button onclick="answer(false, 'iphone')">Нет</button>
+    </div>
+
+    <div id="question9" class="question">
+        <p>9. Планируете ли вы использовать NFC на смартфоне (бесконтактная оплата телефоном)?</p>
+        <button onclick="answer(true, 'android')">Да</button>
+        <button onclick="answer(false, 'iphone')">Нет</button>
+    </div>
+
+    <div id="question10" class="question">
+        <p>10. Хотите ли вы, чтобы смартфон работал стабильно и без сбоев?</p>
+        <button onclick="answer(true, 'iphone')">Да</button>
+        <button onclick="answer(false, 'android')">Нет</button>
+    </div>
+
+    <div id="result"></div>
+
+    <div class="stats" id="stats">
+        <div class="stats-title">Общая статистика</div>
+        <div>Всего прошло: <span id="total">0</span></div>
+        <div>Выбрали iPhone: <span id="iphoneTotal">0</span></div>
+        <div>Выбрали Android: <span id="androidTotal">0</span></div>
+        <div id="loadingStats" style="text-align: center; display: none;">
+            <span>Загрузка данных...</span>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <script>
+        // Ваша конфигурация Firebase (замените на свою!)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYYHIRN2BDT0mu2GfsjTIDUmSa7FsVxQk",
+            authDomain: "mysiteopros.firebaseapp.com",
+            projectId: "mysiteopros",
+            storageBucket: "mysiteopros.firebasestorage.app",
+            messagingSenderId: "687546063625",
+            appId: "1:687546063625:web:26b8349c8ff58bfa1bd1d8",
+            measurementId: "G-HKJVVZSFY8"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let currentQuestion = 1;
+        const totalQuestions = 10;
+        let iphoneScore = 0;
+        let androidScore = 0;
+
+        // Загружаем статистику при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+        });
+
+        function answer(isYes, device) {
+            if (device === 'iphone') {
+                iphoneScore += isYes ? 1 : 0;
+            } else {
+                androidScore += isYes ? 1 : 0;
+            }
+
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+
+            if (currentQuestion <= totalQuestions) {
+                document.getElementById(`question${currentQuestion}`).classList.add('active');
+                document.getElementById('progress').textContent = `Вопрос ${currentQuestion} из ${totalQuestions}`;
+            } else {
+                showResult();
+                saveResultToFirebase(iphoneScore > androidScore ? 'iphone' : 'android');
+            }
+        }
+
+        function showResult() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            document.getElementById('progress').style.display = 'none';
+
+            if (iphoneScore > androidScore) {
+                resultDiv.innerHTML = `<p>Ваш результат: iPhone (${iphoneScore} баллов) vs Android (${androidScore} баллов)</p>
+                                      <p>Вам больше подходит iPhone!</p>`;
+                resultDiv.style.backgroundColor = '#f0f0f0';
+            } else if (androidScore > iphoneScore) {
+                resultDiv.innerHTML = `<p>Ваш результат: Android (${androidScore} баллов) vs iPhone (${iphoneScore} баллов)</p>
+                                      <p>Вам больше подходит Android!</p>`;
+                resultDiv.style.backgroundColor = '#e9f7ef';
+            } else {
+                resultDiv.innerHTML = `<p>Ваш результат: iPhone (${iphoneScore} баллов) и Android (${androidScore} баллов) набрали одинаковое количество баллов!</p>
+                                      <p>Вы можете выбрать любой смартфон, оба варианта вам подходят.</p>`;
+                resultDiv.style.backgroundColor = '#e9e9f7';
+            }
+        }
+
+        // Сохраняем результат в Firebase
+        async function saveResultToFirebase(winner) {
+            try {
+                await db.collection("surveyResults").add({
+                    choice: winner,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    iphoneScore: iphoneScore,
+                    androidScore: androidScore
+                });
+                loadStats(); // Обновляем статистику после сохранения
+            } catch (error) {
+                console.error("Ошибка при сохранении результата: ", error);
+            }
+        }
+
+        // Загружаем статистику из Firebase
+        function loadStats() {
+            document.getElementById('loadingStats').style.display = 'block';
+
+            db.collection("surveyResults").get()
+                .then((querySnapshot) => {
+                    let total = 0;
+                    let iphone = 0;
+                    let android = 0;
+
+                    querySnapshot.forEach((doc) => {
+                        total++;
+                        if (doc.data().choice === 'iphone') {
+                            iphone++;
+                        } else {
+                            android++;
+                        }
+                    });
+
+                    document.getElementById('total').textContent = total;
+                    document.getElementById('iphoneTotal').textContent = iphone;
+                    document.getElementById('androidTotal').textContent = android;
+                    document.getElementById('loadingStats').style.display = 'none';
+                })
+                .catch((error) => {
+                    console.error("Ошибка при загрузке статистики: ", error);
+                    document.getElementById('loadingStats').style.display = 'none';
+                });
+        }
+
+        // Обновляем статистику каждые 30 секунд
+        setInterval(loadStats, 30000);
+    </script>
+</body>
+</html>
