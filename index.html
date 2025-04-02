@@ -220,16 +220,13 @@
             document.getElementById('progress').style.display = 'none';
 
             if (iphoneScore > androidScore) {
-                resultDiv.innerHTML = `<p>Ваш результат: iPhone (${iphoneScore} баллов) vs Android (${androidScore} баллов)</p>
-                                      <p>Вам больше подходит iPhone!</p>`;
+                resultDiv.innerHTML = `<p>Вам больше подходит iPhone!</p>`;
                 resultDiv.style.backgroundColor = '#f0f0f0';
             } else if (androidScore > iphoneScore) {
-                resultDiv.innerHTML = `<p>Ваш результат: Android (${androidScore} баллов) vs iPhone (${iphoneScore} баллов)</p>
-                                      <p>Вам больше подходит Android!</p>`;
+                resultDiv.innerHTML = `<p>Вам больше подходит Android!</p>`;
                 resultDiv.style.backgroundColor = '#e9f7ef';
             } else {
-                resultDiv.innerHTML = `<p>Ваш результат: iPhone (${iphoneScore} баллов) и Android (${androidScore} баллов) набрали одинаковое количество баллов!</p>
-                                      <p>Вы можете выбрать любой смартфон, оба варианта вам подходят.</p>`;
+                resultDiv.innerHTML = `<p>Вы можете выбрать любой смартфон, оба варианта вам подходят.</p>`;
                 resultDiv.style.backgroundColor = '#e9e9f7';
             }
         }
